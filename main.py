@@ -46,6 +46,14 @@ df = pd.DataFrame(json_array)
 # Group data by IP address and HTTP method, count requests
 grouped = df.groupby(['ip', 'method']).size().reset_index(name='request_count')
 
+# Convert the DataFrame to JSON format
+json_result = grouped.to_json(orient='records')
+
+# Write the JSON to a file
+with open('output/result.json', 'w') as file:
+    file.write(json_result)
+
+
 
             
             
