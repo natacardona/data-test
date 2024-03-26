@@ -2,12 +2,12 @@
 import re
 import json
 import pandas as pd
-
+from scipy.stats import zscore
 
  # Create an empty list to store JSON objects 
 json_array = []
 # Create a variable to have the max number of records
-records_to_filter = 100
+records_to_filter = 2000
 count = 0
 
 
@@ -54,6 +54,21 @@ with open('output/result.json', 'w') as file:
     file.write(json_result)
 
 
+df = pd.DataFrame(grouped)
+
+# Calculate the z-score for request_count
+df['request_count_zscore'] = zscore(df['request_count'])
+
+# Define a threshold for anomalies (e.g., z-score greater than 3)
+threshold = 3
+
+# Identify anomalies
+anomalies = df[df['request_count_zscore'] > threshold]
+
+# Calculate the proportion of anomalies
+proportion_anomalies = len(anomalies) / len(df)* 100
+
+print("Proportion of anomalies found:", proportion_anomalies)
 
             
             
