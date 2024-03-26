@@ -1,11 +1,16 @@
 # Importing regular expression python module
 import re
 import json
+import pandas as pd
+
+
  # Create an empty list to store JSON objects 
 json_array = []
 # Create a variable to have the max number of records
 records_to_filter = 100
 count = 0
+
+
 # Read data
 with open('data-source/access.log', 'r') as file:
     # Read each line of the file
@@ -33,6 +38,13 @@ with open('data-source/access.log', 'r') as file:
         # This is a break condition because we have a lot of records
         if count == records_to_filter:
             break
+        
+        
+# Creating a Dataframe with the filtered data 
+df = pd.DataFrame(json_array)
+
+# Group data by IP address and HTTP method, count requests
+grouped = df.groupby(['ip', 'method']).size().reset_index(name='request_count')
 
 
             
