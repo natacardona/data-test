@@ -70,5 +70,20 @@ proportion_anomalies = len(anomalies) / len(df)* 100
 
 print("Proportion of anomalies found:", proportion_anomalies)
 
+# Define a threshold for the number of requests to consider as a brute force attack
+brute_force_threshold = 10
+
+# Group DataFrame by IP address and sum the request counts
+ip_request_counts = df.groupby('ip')['request_count'].sum()
+
+# Identify potential brute force attacks
+potential_brute_force = ip_request_counts[ip_request_counts > brute_force_threshold]
+
+# Print IP addresses involved in potential brute force attacks
+if not potential_brute_force.empty:
+    print("Potential Brute Force Attacks:")
+    print(potential_brute_force)
+else:
+    print("No potential brute force attacks detected.")
             
             
