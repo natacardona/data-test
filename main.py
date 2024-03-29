@@ -98,13 +98,14 @@ def build_output_json(df):
 def calculate_anomalies(df):
     # Calculate the z-score for request_count
     df['request_count_zscore'] = zscore(df['request_count'])
-    # Define a threshold for anomalies (e.g., z-score greater than 3)
-    threshold = anomalies_threshold
     # Identify anomalies
-    anomalies = df[df['request_count_zscore'] > threshold]
+    anomalies = df[df['request_count_zscore'] > anomalies_threshold]
+    print("Print anomalies")
+    print(anomalies)
     # Calculate the proportion of anomalies
     proportion_anomalies = len(anomalies) / len(df)* 100
     print("Proportion of anomalies found:", proportion_anomalies)
+    return anomalies
     
 def calculate_brute_force_attacks(df):    
     # Group DataFrame by IP address and sum the request counts
@@ -124,8 +125,8 @@ check_input_file()
 check_int_parse()
 create_output_directory()              
 df = read_and_filter_data()
-build_output_json(df)
-calculate_anomalies(df)
+anomalies = calculate_anomalies(df)
+build_output_json(anomalies)
 calculate_brute_force_attacks(df)
 
 
